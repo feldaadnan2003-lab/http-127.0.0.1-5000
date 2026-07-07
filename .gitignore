@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.env
+venv/
+env/
+database/gov_dss.db
+uploads/documents/*
+uploads/images/*
+!uploads/documents/.gitkeep
+!uploads/images/.gitkeep
+!uploads/.gitkeep
+.vscode/
+.idea/

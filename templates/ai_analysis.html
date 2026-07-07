@@ -1,0 +1,110 @@
+{% extends "layout_app.html" %}
+{% block title %}AI Analysis — {{ report.title }}{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <span class="eyebrow"><i class="fa-solid fa-robot"></i> AI Analysis Report</span>
+    <h1>{{ report.title }}</h1>
+    <p class="page-subtitle">{{ report.ministry }} &middot; {{ report.department }} &middot; Submitted {{ report.created_at.strftime('%B %d, %Y') }}</p>
+  </div>
+  <div class="page-header-actions">
+    <form method="POST" action="{{ url_for('report.update_status', report_id=report.id) }}" class="status-form">
+      <select name="status" onchange="this.form.submit()">
+        {% for s in ['Pending Review', 'Under Investigation', 'Resolved', 'Escalated'] %}
+        <option value="{{ s }}" {{ 'selected' if report.status == s }}>{{ s }}</option>
+        {% endfor %}
+      </select>
+    </form>
+  </div>
+</div>
+
+<div class="analysis-grid">
+
+  <div class="panel reveal panel-span-2">
+    <div class="panel-head"><h3><i class="fa-solid fa-align-left"></i> Report Summary</h3></div>
+    <p class="summary-text">{{ report.summary or report.description }}</p>
+  </div>
+
+  <div class="panel reveal confidence-panel">
+    <div class="panel-head"><h3><i class="fa-solid fa-percent"></i> Confidence Score</h3></div>
+    <div class="confidence-ring" style="--pct: {{ ((report.confidence_score or 0) * 100)|round(0, 'floor') }}">
+      <span>{{ ((report.confidence_score or 0) * 100)|round(1) }}%</span>
+    </div>
+    <p class="confidence-caption">Model certainty in the predicted category</p>
+  </div>
+
+  <div class="panel reveal">
+    <div class="panel-head"><h3><i class="fa-solid fa-tags"></i> Text Classification</h3></div>
+    <div class="classification-result">
+      <span class="badge badge-neutral badge-lg">{{ report.predicted_category }}</span>
+    </div>
+    {% if top_predictions %}
+    <div class="top-predictions">
+      {% for p in top_predictions %}
+      <div class="prediction-row">
+        <span>{{ p.category }}</span>
+        <div class="prediction-track"><div class="prediction-fill" style="width: {{ (p.probability * 100)|round(1) }}%"></div></div>
+        <span>{{ (p.probability * 100)|round(1) }}%</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="panel reveal">
+    <div class="panel-head"><h3><i class="fa-solid fa-triangle-exclamation"></i> Risk Level</h3></div>
+    <div class="risk-display risk-{{ (report.risk_level or 'low')|lower }}">
+      <i class="fa-solid fa-shield-halved"></i>
+      <span>{{ report.risk_level or 'N/A' }}</span>
+    </div>
+  </div>
+
+  <div class="panel reveal">
+    <div class="panel-head"><h3><i class="fa-solid fa-flag"></i> Decision Priority</h3></div>
+    <div class="risk-display risk-{{ (report.decision_priority or 'low')|lower }}">
+      <i class="fa-solid fa-bolt"></i>
+      <span>{{ report.decision_priority or 'N/A' }}</span>
+    </div>
+  </div>
+
+  <div class="panel reveal panel-span-2">
+    <div class="panel-head"><h3><i class="fa-solid fa-key"></i> Keyword Extraction (NLP)</h3></div>
+    <div class="keyword-cloud">
+      {% for kw in report.keyword_list() %}
+      <span class="keyword-chip">{{ kw }}</span>
+      {% else %}
+      <span class="empty-state-small">No keywords extracted.</span>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="panel reveal panel-span-2">
+    <div class="panel-head"><h3><i class="fa-solid fa-lightbulb"></i> AI Recommendation</h3></div>
+    <p class="recommendation-text">{{ report.recommendation }}</p>
+  </div>
+
+  <div class="panel reveal panel-span-2">
+    <div class="panel-head"><h3><i class="fa-solid fa-list-check"></i> Suggested Action</h3></div>
+    <p class="recommendation-text">{{ report.suggested_action }}</p>
+  </div>
+
+  <div class="panel reveal panel-span-2">
+    <div class="panel-head"><h3><i class="fa-solid fa-paperclip"></i> Attachments &amp; Details</h3></div>
+    <div class="detail-grid">
+      <div><span>Priority</span><strong>{{ report.priority }}</strong></div>
+      <div><span>Status</span><strong>{{ report.status }}</strong></div>
+      <div><span>Report Date</span><strong>{{ report.report_date }}</strong></div>
+      <div><span>Submitted By</span><strong>{{ report.submitted_by.full_name if report.submitted_by else 'N/A' }}</strong></div>
+      {% if report.file_path %}
+      <div><span>Document</span><a href="{{ url_for('uploaded_file', filename=report.file_path) }}" target="_blank"><i class="fa-solid fa-file"></i> View Document</a></div>
+      {% endif %}
+    </div>
+    {% if report.image_path %}
+    <img src="{{ url_for('uploaded_file', filename=report.image_path) }}" class="attachment-image" alt="Report attachment">
+    {% endif %}
+  </div>
+
+</div>
+
+{% endblock %}

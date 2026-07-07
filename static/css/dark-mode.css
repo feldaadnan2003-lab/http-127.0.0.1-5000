@@ -1,0 +1,38 @@
+/* =========================================================
+   Dark Mode Theme Overrides
+   Activated via [data-theme="dark"] on <html>, toggled by theme-toggle.js
+   ========================================================= */
+
+html[data-theme="dark"] {
+  --bg-body: #0b1120;
+  --bg-surface: #121a2c;
+  --bg-surface-alt: #182338;
+  --bg-elevated: #141d31;
+
+  --text-primary: #eef2f9;
+  --text-secondary: #a9b6cc;
+  --text-muted: #6f7f9a;
+
+  --border-color: #25304a22;
+  --border-color: #24304a;
+  --border-strong: #33415f;
+
+  --color-primary-light: #16294f;
+  --color-secondary-light: #0f2c22;
+  --color-danger-light: #3a1520;
+  --color-warning-light: #3a2c10;
+  --color-success-light: #0f2c22;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.45);
+}
+
+html[data-theme="dark"] .public-navbar { background: rgba(11, 17, 32, 0.85); }
+html[data-theme="dark"] .hero-glow { background: radial-gradient(circle, rgba(26, 188, 156, 0.15), transparent 70%); }
+html[data-theme="dark"] .site-footer { background: #060b16; }
+html[data-theme="dark"] .badge-neutral { color: var(--text-secondary); }
+html[data-theme="dark"] .step-number { color: rgba(10, 92, 212, 0.2); }
+html[data-theme="dark"] .toast { background: var(--bg-elevated); }
+html[data-theme="dark"] .heatmap-table th:first-child,
+html[data-theme="dark"] .heatmap-table td:first-child { background: var(--bg-elevated); }

@@ -1,0 +1,33 @@
+{% extends "layout_app.html" %}
+{% block title %}Roles & Permissions — Admin{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1>Roles &amp; Permissions</h1>
+    <p class="page-subtitle">Configure what each role is allowed to access.</p>
+  </div>
+</div>
+
+<div class="roles-grid">
+  {% for role in roles %}
+  <div class="panel reveal">
+    <div class="panel-head">
+      <h3>{{ role.name }}</h3>
+      <span class="badge badge-neutral">{{ role.users|length }} user{{ 's' if role.users|length != 1 }}</span>
+    </div>
+    <p class="role-desc">{{ role.description }}</p>
+    <form method="POST" action="{{ url_for('admin.update_role', role_id=role.id) }}" class="permissions-form">
+      {% for key, label in all_permissions %}
+      <label class="checkbox-label permission-item">
+        <input type="checkbox" name="permissions" value="{{ key }}" {{ 'checked' if key in role.permission_list() }}>
+        {{ label }}
+      </label>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary btn-sm">Save Permissions</button>
+    </form>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

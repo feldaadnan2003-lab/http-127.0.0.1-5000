@@ -1,0 +1,247 @@
+{% extends "layout_public.html" %}
+{% block title %}Government Decision Support Agent — AI-Powered Governance{% endblock %}
+
+{% block content %}
+
+<section class="hero" id="hero">
+  <div class="hero-glow"></div>
+  <div class="container hero-inner">
+    <div class="hero-copy fade-in-up">
+      <span class="pill-badge"><i class="fa-solid fa-sparkles"></i> AI-Powered Governance Platform</span>
+      <h1>Smarter decisions for <span class="text-gradient">stronger government</span>.</h1>
+      <p class="hero-lead">
+        The Government Decision Support Agent uses Natural Language Processing to analyze
+        ministry reports, classify issues automatically, assess risk and generate
+        actionable recommendations — in seconds, not weeks.
+      </p>
+      <div class="hero-actions">
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">
+          <i class="fa-solid fa-rocket"></i> Get Started Free
+        </a>
+        <a href="#how-it-works" class="btn btn-outline btn-lg">
+          <i class="fa-solid fa-circle-play"></i> See How It Works
+        </a>
+      </div>
+      <div class="hero-trust">
+        <i class="fa-solid fa-shield-halved"></i> Trusted across {{ stats.ministries }}+ government ministries
+      </div>
+    </div>
+
+    <div class="hero-visual fade-in-up delay-1">
+      <div class="floating-card card-analysis">
+        <div class="card-analysis-head">
+          <i class="fa-solid fa-brain"></i> AI Analysis
+          <span class="live-dot"></span>
+        </div>
+        <div class="mini-progress"><span style="width:94%"></span></div>
+        <div class="card-analysis-row"><span>Category</span><strong>Infrastructure</strong></div>
+        <div class="card-analysis-row"><span>Confidence</span><strong>94.2%</strong></div>
+        <div class="card-analysis-row"><span>Risk Level</span><strong class="risk-high">High</strong></div>
+      </div>
+      <div class="floating-card card-chart">
+        <i class="fa-solid fa-chart-line"></i>
+        <svg viewBox="0 0 100 40" class="mini-chart">
+          <polyline points="0,35 15,28 30,30 45,15 60,20 75,8 100,5" />
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats-strip">
+  <div class="container stats-grid">
+    <div class="stat-item"><span class="stat-number" data-count="{{ stats.reports_processed }}">0</span><span class="stat-label">Reports Analyzed</span></div>
+    <div class="stat-item"><span class="stat-number" data-count="{{ stats.ministries }}">0</span><span class="stat-label">Ministries Onboard</span></div>
+    <div class="stat-item"><span class="stat-number" data-count="{{ stats.accuracy_rate }}" data-decimal="1">0</span><span class="stat-label">% Classification Accuracy</span></div>
+    <div class="stat-item"><span class="stat-number" data-count="{{ stats.avg_response_hours }}">0</span><span class="stat-label">Hour Avg. Response Time</span></div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Features</span>
+      <h2>Everything decision-makers need in one place</h2>
+      <p>Purpose-built tools for ministries to submit, analyze and act on operational reports.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon icon-blue"><i class="fa-solid fa-file-shield"></i></div>
+        <h3>Secure Report Submission</h3>
+        <p>Structured forms with document and image uploads, validated end-to-end.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon icon-green"><i class="fa-solid fa-brain"></i></div>
+        <h3>NLP-Powered Classification</h3>
+        <p>TF-IDF and Logistic Regression automatically categorize incoming reports.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon icon-blue"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <h3>Risk & Priority Scoring</h3>
+        <p>Every report receives a risk level and decision priority for fast triage.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon icon-green"><i class="fa-solid fa-chart-pie"></i></div>
+        <h3>Interactive Analytics</h3>
+        <p>Pie, bar, line charts and heat maps to compare ministry performance.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon icon-blue"><i class="fa-solid fa-users-gear"></i></div>
+        <h3>Role-Based Administration</h3>
+        <p>Fine-grained user roles and permissions for secure collaboration.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon icon-green"><i class="fa-solid fa-bell"></i></div>
+        <h3>Real-Time Alerts</h3>
+        <p>Instant notifications for high-risk and critical-priority reports.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="services">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Services</span>
+      <h2>Built for every layer of government</h2>
+      <p>From field analysts to senior decision-makers, one platform serves everyone.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <i class="fa-solid fa-hospital"></i>
+        <h4>Public Health Monitoring</h4>
+        <p>Track outbreaks, supply shortages and facility performance in real time.</p>
+      </div>
+      <div class="service-card reveal">
+        <i class="fa-solid fa-road"></i>
+        <h4>Infrastructure Oversight</h4>
+        <p>Prioritize maintenance and capital projects using AI risk scoring.</p>
+      </div>
+      <div class="service-card reveal">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <h4>Education Insights</h4>
+        <p>Surface staffing gaps, facility issues and enrollment trends.</p>
+      </div>
+      <div class="service-card reveal">
+        <i class="fa-solid fa-scale-balanced"></i>
+        <h4>Governance & Compliance</h4>
+        <p>Flag procurement irregularities and compliance risks automatically.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how-it-works">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">How It Works</span>
+      <h2>From report to recommendation in four steps</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card reveal">
+        <div class="step-number">01</div>
+        <h4>Submit a Report</h4>
+        <p>Analysts file a structured report with title, description, ministry and attachments.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-number">02</div>
+        <h4>NLP Processing</h4>
+        <p>The text is cleaned, tokenized and vectorized using TF-IDF.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-number">03</div>
+        <h4>AI Classification</h4>
+        <p>A Logistic Regression model predicts the category with a confidence score.</p>
+      </div>
+      <div class="step-card reveal">
+        <div class="step-number">04</div>
+        <h4>Recommendation</h4>
+        <p>Risk level, suggested action and decision priority are generated instantly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="ai-capabilities">
+  <div class="container ai-capabilities-inner">
+    <div class="section-head">
+      <span class="eyebrow">Artificial Intelligence</span>
+      <h2>The AI engine behind every decision</h2>
+      <p>A transparent, explainable pipeline — not a black box.</p>
+    </div>
+    <div class="capabilities-grid">
+      <div class="capability-item reveal"><i class="fa-solid fa-broom"></i><span>Text Cleaning</span></div>
+      <div class="capability-item reveal"><i class="fa-solid fa-scissors"></i><span>Tokenization</span></div>
+      <div class="capability-item reveal"><i class="fa-solid fa-key"></i><span>Keyword Extraction</span></div>
+      <div class="capability-item reveal"><i class="fa-solid fa-tags"></i><span>Report Classification</span></div>
+      <div class="capability-item reveal"><i class="fa-solid fa-crystal-ball"></i><span>Category Prediction</span></div>
+      <div class="capability-item reveal"><i class="fa-solid fa-lightbulb"></i><span>Recommendation Generation</span></div>
+      <div class="capability-item reveal"><i class="fa-solid fa-percent"></i><span>Confidence Scoring</span></div>
+      <div class="capability-item reveal"><i class="fa-solid fa-gauge"></i><span>Risk Assessment</span></div>
+    </div>
+    <div class="tech-stack-strip">
+      <span>Python</span><span>Flask</span><span>Pandas</span><span>Scikit-learn</span><span>NLTK</span><span>TF-IDF</span><span>Logistic Regression</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">FAQ</span>
+      <h2>Frequently asked questions</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal">
+        <button class="faq-question">How accurate is the AI classification? <i class="fa-solid fa-chevron-down"></i></button>
+        <div class="faq-answer"><p>The classifier is trained on labeled government report data using TF-IDF and Logistic Regression, and displays a confidence score with every prediction so analysts can verify results.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">Can different ministries have different access levels? <i class="fa-solid fa-chevron-down"></i></button>
+        <div class="faq-answer"><p>Yes. The platform includes role-based access control with granular permissions managed from the Administration panel.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">What file types can be attached to a report? <i class="fa-solid fa-chevron-down"></i></button>
+        <div class="faq-answer"><p>Reports support document uploads (PDF, Word, Excel, text, CSV) and image uploads (PNG, JPG, GIF, WebP) up to 25MB.</p></div>
+      </div>
+      <div class="faq-item reveal">
+        <button class="faq-question">Is my data secure? <i class="fa-solid fa-chevron-down"></i></button>
+        <div class="faq-answer"><p>All passwords are hashed, sessions are protected, and every administrative action is recorded in the activity log for full auditability.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="contact">
+  <div class="container contact-grid">
+    <div class="contact-copy reveal">
+      <span class="eyebrow">Contact</span>
+      <h2>Talk to our team</h2>
+      <p>Have a question about onboarding your ministry? Send us a message and we'll respond shortly.</p>
+      <div class="contact-detail"><i class="fa-solid fa-envelope"></i> support@gov-dss.gov</div>
+      <div class="contact-detail"><i class="fa-solid fa-phone"></i> +1 (000) 000-0000</div>
+      <div class="contact-detail"><i class="fa-solid fa-location-dot"></i> Government Complex, Capital City</div>
+    </div>
+    <form class="contact-form reveal" method="POST" action="{{ url_for('main.contact') }}">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" name="name" required placeholder="Jane Doe">
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" name="email" required placeholder="jane@ministry.gov">
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea name="message" rows="4" required placeholder="How can we help?"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
+    </form>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
+{% endblock %}

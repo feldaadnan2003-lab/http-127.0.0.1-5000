@@ -1,0 +1,57 @@
+{% extends "layout_app.html" %}
+{% block title %}Settings — Admin{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1>System Settings</h1>
+    <p class="page-subtitle">Configure ministries, categories and platform preferences.</p>
+  </div>
+</div>
+
+<div class="dashboard-grid">
+  <div class="panel reveal panel-span-2">
+    <div class="panel-head"><h3>General Settings</h3></div>
+    <form method="POST" class="settings-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Platform Name</label>
+          <input type="text" value="Government Decision Support Agent">
+        </div>
+        <div class="form-group">
+          <label>Support Email</label>
+          <input type="email" value="support@gov-dss.gov">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Max Upload Size (MB)</label>
+          <input type="number" value="25">
+        </div>
+        <div class="form-group">
+          <label>AI Confidence Threshold</label>
+          <input type="number" value="50" min="0" max="100">
+        </div>
+      </div>
+      <label class="checkbox-label"><input type="checkbox" checked> Enable email notifications for critical reports</label>
+      <label class="checkbox-label"><input type="checkbox" checked> Require admin approval for new registrations</label>
+      <button type="submit" class="btn btn-primary">Save Settings</button>
+    </form>
+  </div>
+
+  <div class="panel reveal">
+    <div class="panel-head"><h3>Ministries</h3></div>
+    <ul class="simple-list">
+      {% for m in ministries %}<li>{{ m }}</li>{% endfor %}
+    </ul>
+  </div>
+
+  <div class="panel reveal">
+    <div class="panel-head"><h3>Report Categories</h3></div>
+    <ul class="simple-list">
+      {% for c in categories %}<li>{{ c }}</li>{% endfor %}
+    </ul>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "layout_app.html" %}
+{% block title %}Reports — Government Decision Support Agent{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1>Reports</h1>
+    <p class="page-subtitle">Browse, filter and review all submitted reports.</p>
+  </div>
+  <div class="page-header-actions">
+    <a href="{{ url_for('report.new_report') }}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Submit Report</a>
+  </div>
+</div>
+
+<div class="panel filter-panel reveal">
+  <form method="GET" class="filter-form">
+    <div class="form-group">
+      <label>Search</label>
+      <input type="text" name="q" value="{{ request.args.get('q', '') }}" placeholder="Search title or description...">
+    </div>
+    <div class="form-group">
+      <label>Ministry</label>
+      <select name="ministry">
+        <option value="">All Ministries</option>
+        {% for m in ministries %}
+        <option value="{{ m }}" {{ 'selected' if request.args.get('ministry') == m }}>{{ m }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Priority</label>
+      <select name="priority">
+        <option value="">All Priorities</option>
+        {% for p in priorities %}
+        <option value="{{ p }}" {{ 'selected' if request.args.get('priority') == p }}>{{ p }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Status</label>
+      <select name="status">
+        <option value="">All Statuses</option>
+        {% for s in ['Pending Review', 'Under Investigation', 'Resolved', 'Escalated'] %}
+        <option value="{{ s }}" {{ 'selected' if request.args.get('status') == s }}>{{ s }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-outline"><i class="fa-solid fa-filter"></i> Filter</button>
+    <a href="{{ url_for('report.report_list') }}" class="btn btn-ghost">Clear</a>
+  </form>
+</div>
+
+<div class="panel reveal">
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr><th>Title</th><th>Ministry</th><th>Category</th><th>Priority</th><th>Risk</th><th>Status</th><th>Submitted</th></tr>
+      </thead>
+      <tbody>
+        {% for r in reports %}
+        <tr onclick="window.location='{{ url_for('report.ai_analysis', report_id=r.id) }}'">
+          <td>{{ r.title }}</td>
+          <td>{{ r.ministry }}</td>
+          <td><span class="badge badge-neutral">{{ r.predicted_category or '—' }}</span></td>
+          <td><span class="badge badge-{{ r.priority|lower }}">{{ r.priority }}</span></td>
+          <td><span class="badge badge-{{ (r.risk_level or 'low')|lower }}">{{ r.risk_level or 'N/A' }}</span></td>
+          <td><span class="status-pill status-{{ r.status|lower|replace(' ', '-') }}">{{ r.status }}</span></td>
+          <td>{{ r.created_at.strftime('%Y-%m-%d') }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="empty-cell">No reports match your filters.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

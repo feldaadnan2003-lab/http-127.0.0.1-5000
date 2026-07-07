@@ -1,0 +1,42 @@
+{% extends "layout_app.html" %}
+{% block title %}Reports Management — Admin{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1>Reports Management</h1>
+    <p class="page-subtitle">Full administrative control over all submitted reports.</p>
+  </div>
+</div>
+
+<div class="panel reveal">
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr><th>ID</th><th>Title</th><th>Ministry</th><th>Category</th><th>Risk</th><th>Status</th><th>Submitted By</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for r in reports %}
+        <tr>
+          <td>#{{ r.id }}</td>
+          <td><a href="{{ url_for('report.ai_analysis', report_id=r.id) }}">{{ r.title }}</a></td>
+          <td>{{ r.ministry }}</td>
+          <td><span class="badge badge-neutral">{{ r.predicted_category or '—' }}</span></td>
+          <td><span class="badge badge-{{ (r.risk_level or 'low')|lower }}">{{ r.risk_level or 'N/A' }}</span></td>
+          <td><span class="status-pill status-{{ r.status|lower|replace(' ', '-') }}">{{ r.status }}</span></td>
+          <td>{{ r.submitted_by.full_name if r.submitted_by else 'N/A' }}</td>
+          <td>
+            <form method="POST" action="{{ url_for('admin.delete_report', report_id=r.id) }}" onsubmit="return confirm('Delete this report permanently?');">
+              <button type="submit" class="icon-btn-danger" title="Delete report"><i class="fa-solid fa-trash"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="empty-cell">No reports submitted yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

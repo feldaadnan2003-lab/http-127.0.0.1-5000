@@ -1,0 +1,58 @@
+{% extends "layout_app.html" %}
+{% block title %}User Management — Admin{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1>User Management</h1>
+    <p class="page-subtitle">Manage platform accounts, roles and access status.</p>
+  </div>
+</div>
+
+<div class="panel reveal">
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr><th>Name</th><th>Email</th><th>Ministry</th><th>Role</th><th>Status</th><th>Last Login</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td>
+            <div class="user-cell"><span class="avatar avatar-sm">{{ u.full_name[0] }}</span> {{ u.full_name }}</div>
+          </td>
+          <td>{{ u.email }}</td>
+          <td>{{ u.ministry or '—' }}</td>
+          <td>
+            <form method="POST" action="{{ url_for('admin.update_user', user_id=u.id) }}" class="inline-form">
+              <select name="role_id" onchange="this.form.submit()">
+                {% for role in roles %}
+                <option value="{{ role.id }}" {{ 'selected' if u.role_id == role.id }}>{{ role.name }}</option>
+                {% endfor %}
+              </select>
+              <input type="hidden" name="is_active" value="on" {{ 'disabled' if not u.is_active_user }}>
+            </form>
+          </td>
+          <td>
+            <form method="POST" action="{{ url_for('admin.update_user', user_id=u.id) }}" class="inline-form">
+              <input type="hidden" name="role_id" value="{{ u.role_id }}">
+              <label class="switch">
+                <input type="checkbox" name="is_active" {{ 'checked' if u.is_active_user }} onchange="this.form.submit()">
+                <span class="slider"></span>
+              </label>
+            </form>
+          </td>
+          <td>{{ u.last_login.strftime('%Y-%m-%d %H:%M') if u.last_login else 'Never' }}</td>
+          <td>
+            <form method="POST" action="{{ url_for('admin.delete_user', user_id=u.id) }}" onsubmit="return confirm('Delete this user?');">
+              <button type="submit" class="icon-btn-danger" title="Delete user"><i class="fa-solid fa-trash"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

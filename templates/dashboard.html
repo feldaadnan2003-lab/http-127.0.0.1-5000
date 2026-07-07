@@ -1,0 +1,129 @@
+{% extends "layout_app.html" %}
+{% block title %}Dashboard — Government Decision Support Agent{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1>Welcome back, {{ current_user.full_name.split(' ')[0] }}</h1>
+    <p class="page-subtitle">Here's what's happening across ministries today.</p>
+  </div>
+  <div class="page-header-actions">
+    <a href="{{ url_for('report.new_report') }}" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Submit Report</a>
+  </div>
+</div>
+
+<div class="stat-cards-grid">
+  <div class="stat-card reveal">
+    <div class="stat-card-icon icon-blue"><i class="fa-solid fa-file-lines"></i></div>
+    <div class="stat-card-body"><span class="stat-card-value">{{ total_reports }}</span><span class="stat-card-label">Total Reports</span></div>
+  </div>
+  <div class="stat-card reveal">
+    <div class="stat-card-icon icon-amber"><i class="fa-solid fa-hourglass-half"></i></div>
+    <div class="stat-card-body"><span class="stat-card-value">{{ pending_reports }}</span><span class="stat-card-label">Pending Review</span></div>
+  </div>
+  <div class="stat-card reveal">
+    <div class="stat-card-icon icon-green"><i class="fa-solid fa-circle-check"></i></div>
+    <div class="stat-card-body"><span class="stat-card-value">{{ resolved_reports }}</span><span class="stat-card-label">Resolved</span></div>
+  </div>
+  <div class="stat-card reveal">
+    <div class="stat-card-icon icon-red"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <div class="stat-card-body"><span class="stat-card-value">{{ critical_reports }}</span><span class="stat-card-label">Critical Risk</span></div>
+  </div>
+</div>
+
+<div class="dashboard-grid">
+  <div class="panel reveal panel-span-2">
+    <div class="panel-head">
+      <h3>Report Categories</h3>
+    </div>
+    <div class="chart-box"><canvas id="categoryChart"></canvas></div>
+  </div>
+
+  <div class="panel reveal">
+    <div class="panel-head"><h3>Priority Breakdown</h3></div>
+    <div class="chart-box"><canvas id="priorityChart"></canvas></div>
+  </div>
+
+  <div class="panel reveal panel-span-2">
+    <div class="panel-head"><h3>Recent Reports</h3><a href="{{ url_for('report.report_list') }}" class="link-muted">View all</a></div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Title</th><th>Ministry</th><th>Category</th><th>Risk</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for r in recent_reports %}
+          <tr onclick="window.location='{{ url_for('report.ai_analysis', report_id=r.id) }}'">
+            <td>{{ r.title }}</td>
+            <td>{{ r.ministry }}</td>
+            <td><span class="badge badge-neutral">{{ r.predicted_category or '—' }}</span></td>
+            <td><span class="badge badge-{{ (r.risk_level or 'low')|lower }}">{{ r.risk_level or 'N/A' }}</span></td>
+            <td><span class="status-pill status-{{ r.status|lower|replace(' ', '-') }}">{{ r.status }}</span></td>
+          </tr>
+          {% else %}
+          <tr><td colspan="5" class="empty-cell">No reports yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel reveal">
+    <div class="panel-head"><h3>Alerts</h3></div>
+    <div class="alert-list">
+      {% for a in alerts %}
+      <a href="{{ url_for('report.ai_analysis', report_id=a.id) }}" class="alert-item risk-{{ (a.risk_level or 'low')|lower }}">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <div>
+          <strong>{{ a.title }}</strong>
+          <span>{{ a.ministry }} &middot; {{ a.risk_level }} risk</span>
+        </div>
+      </a>
+      {% else %}
+      <div class="empty-state-small">No active alerts.</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="panel reveal panel-span-2">
+    <div class="panel-head"><h3>Ministry Performance</h3><a href="{{ url_for('analytics.index') }}" class="link-muted">Full analytics</a></div>
+    <div class="performance-bars">
+      {% for ministry, score in ministry_perf %}
+      <div class="performance-row">
+        <span class="performance-label">{{ ministry }}</span>
+        <div class="performance-track"><div class="performance-fill" style="width: {{ score }}%"></div></div>
+        <span class="performance-score">{{ score|round(1) }}%</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="panel reveal">
+    <div class="panel-head"><h3>Quick Actions</h3></div>
+    <div class="quick-actions">
+      <a href="{{ url_for('report.new_report') }}" class="quick-action-btn"><i class="fa-solid fa-file-circle-plus"></i> New Report</a>
+      <a href="{{ url_for('analytics.index') }}" class="quick-action-btn"><i class="fa-solid fa-chart-line"></i> View Analytics</a>
+      <a href="{{ url_for('report.report_list') }}" class="quick-action-btn"><i class="fa-solid fa-magnifying-glass"></i> Browse Reports</a>
+      {% if current_user.role_name == 'Administrator' %}
+      <a href="{{ url_for('admin.users') }}" class="quick-action-btn"><i class="fa-solid fa-users-gear"></i> Manage Users</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  window.DASHBOARD_DATA = {
+    categories: {
+      labels: {{ category_counts|map(attribute=0)|list|tojson }},
+      values: {{ category_counts|map(attribute=1)|list|tojson }}
+    },
+    priorities: {
+      labels: {{ priority_counts|map(attribute=0)|list|tojson }},
+      values: {{ priority_counts|map(attribute=1)|list|tojson }}
+    }
+  };
+</script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

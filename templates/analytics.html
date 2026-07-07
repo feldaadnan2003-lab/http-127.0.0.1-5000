@@ -1,0 +1,44 @@
+{% extends "layout_app.html" %}
+{% block title %}Analytics — Government Decision Support Agent{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1>Analytics</h1>
+    <p class="page-subtitle">Interactive dashboards across categories, ministries and time.</p>
+  </div>
+</div>
+
+<div class="dashboard-grid">
+  <div class="panel reveal">
+    <div class="panel-head"><h3>Category Distribution</h3></div>
+    <div class="chart-box"><canvas id="pieCategoryChart"></canvas></div>
+  </div>
+
+  <div class="panel reveal">
+    <div class="panel-head"><h3>Risk Levels</h3></div>
+    <div class="chart-box"><canvas id="riskPieChart"></canvas></div>
+  </div>
+
+  <div class="panel reveal panel-span-2">
+    <div class="panel-head"><h3>Monthly Reports Trend</h3></div>
+    <div class="chart-box"><canvas id="monthlyLineChart"></canvas></div>
+  </div>
+
+  <div class="panel reveal panel-span-2">
+    <div class="panel-head"><h3>Ministry Performance Comparison</h3></div>
+    <div class="chart-box"><canvas id="ministryBarChart"></canvas></div>
+  </div>
+
+  <div class="panel reveal panel-span-3">
+    <div class="panel-head"><h3>Ministry Activity Heat Map</h3><span class="link-muted">Report volume by month</span></div>
+    <div id="heatmapContainer" class="heatmap-container"></div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block body_class %}app-shell{% endblock %}
+{% block body %}
+<div class="app-container">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-mark"><i class="fa-solid fa-landmark"></i></span>
+      <span class="brand-text">Gov<strong>DSS</strong></span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <span class="nav-section-label">Main</span>
+      <a href="{{ url_for('dashboard.index') }}" class="nav-item {{ 'active' if request.endpoint == 'dashboard.index' }}">
+        <i class="fa-solid fa-gauge-high"></i><span>Dashboard</span>
+      </a>
+      <a href="{{ url_for('report.report_list') }}" class="nav-item {{ 'active' if request.endpoint and request.endpoint.startswith('report.') }}">
+        <i class="fa-solid fa-file-lines"></i><span>Reports</span>
+      </a>
+      <a href="{{ url_for('report.new_report') }}" class="nav-item {{ 'active' if request.endpoint == 'report.new_report' }}">
+        <i class="fa-solid fa-file-circle-plus"></i><span>Submit Report</span>
+      </a>
+      <a href="{{ url_for('analytics.index') }}" class="nav-item {{ 'active' if request.endpoint and request.endpoint.startswith('analytics.') }}">
+        <i class="fa-solid fa-chart-pie"></i><span>Analytics</span>
+      </a>
+
+      {% if current_user.is_authenticated and current_user.role_name == 'Administrator' %}
+      <span class="nav-section-label">Administration</span>
+      <a href="{{ url_for('admin.users') }}" class="nav-item {{ 'active' if request.endpoint == 'admin.users' }}">
+        <i class="fa-solid fa-users-gear"></i><span>User Management</span>
+      </a>
+      <a href="{{ url_for('admin.roles') }}" class="nav-item {{ 'active' if request.endpoint == 'admin.roles' }}">
+        <i class="fa-solid fa-user-shield"></i><span>Roles &amp; Permissions</span>
+      </a>
+      <a href="{{ url_for('admin.reports') }}" class="nav-item {{ 'active' if request.endpoint == 'admin.reports' }}">
+        <i class="fa-solid fa-folder-tree"></i><span>Reports Management</span>
+      </a>
+      <a href="{{ url_for('admin.settings') }}" class="nav-item {{ 'active' if request.endpoint == 'admin.settings' }}">
+        <i class="fa-solid fa-gears"></i><span>Settings</span>
+      </a>
+      <a href="{{ url_for('admin.logs') }}" class="nav-item {{ 'active' if request.endpoint == 'admin.logs' }}">
+        <i class="fa-solid fa-clock-rotate-left"></i><span>Activity Logs</span>
+      </a>
+      {% endif %}
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="{{ url_for('main.home') }}" class="nav-item">
+        <i class="fa-solid fa-arrow-left"></i><span>Back to Website</span>
+      </a>
+    </div>
+  </aside>
+
+  <div class="main-panel">
+    <header class="topbar">
+      <button class="sidebar-toggle-btn" id="sidebarToggle" aria-label="Toggle sidebar">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <div class="topbar-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="globalSearch" placeholder="Search reports, ministries, keywords...">
+        <div class="search-results" id="searchResults"></div>
+      </div>
+
+      <div class="topbar-actions">
+        <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle dark mode">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+
+        <div class="notification-dropdown">
+          <button class="icon-btn" id="notificationBtn" aria-label="Notifications">
+            <i class="fa-solid fa-bell"></i>
+            {% if unread_notifications and unread_notifications > 0 %}
+              <span class="badge-dot">{{ unread_notifications }}</span>
+            {% endif %}
+          </button>
+          <div class="dropdown-panel" id="notificationPanel">
+            <div class="dropdown-header">Notifications</div>
+            <div class="dropdown-body" id="notificationList">
+              <div class="empty-state-small">Loading...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="user-dropdown">
+          <button class="user-chip" id="userMenuBtn">
+            <span class="avatar">{{ current_user.full_name[0] if current_user.is_authenticated else '?' }}</span>
+            <span class="user-chip-name">{{ current_user.full_name if current_user.is_authenticated else 'Guest' }}</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="dropdown-panel" id="userMenuPanel">
+            <div class="dropdown-header">
+              {{ current_user.role_name if current_user.is_authenticated else '' }}
+              <div class="dropdown-subtext">{{ current_user.ministry if current_user.is_authenticated else '' }}</div>
+            </div>
+            <a href="{{ url_for('auth.logout') }}" class="dropdown-item"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-content">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</div>
+{% endblock %}
